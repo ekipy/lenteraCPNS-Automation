@@ -92,8 +92,18 @@ public class CheckoutPage {
     public void productCheckout(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        // WebElement trigger = wait.until(
+        //     ExpectedConditions.elementToBeClickable(productDetails)
+        // );
+        // clickLivewireSafely(trigger);
+
+        // // 🔥 WAJIB: ambil ulang setelah Livewire render
+        // wait.until(ExpectedConditions.stalenessOf(trigger));
+
         WebElement serviceDetails = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(productDetails)
+            ExpectedConditions.refreshed(
+                ExpectedConditions.visibilityOfElementLocated(productDetails)
+            )
         );
 
         clickLivewireSafely(serviceDetails);
