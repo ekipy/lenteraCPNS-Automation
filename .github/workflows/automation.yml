@@ -30,12 +30,17 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
+      # 5. Install Allure Report
+      - name: Install Allure CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y allure
+
       # 5. Generate Allure report
       - name: Generate Allure Report
-        uses: simple-elf/allure-report-action@v1.9
-        with:
-          allure_results: app/build/allure-results
-          allure_report: app/build/allure-report
+        run: |
+          allure generate app/build/allure-results \
+            -o app/build/allure-report --clean
 
       # 6. Upload Allure report as artifact
       - name: Upload Allure Report
