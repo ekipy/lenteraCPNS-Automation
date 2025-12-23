@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+
+    //cucumber
+    testImplementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
+
+    // JUnit 5
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Selenium
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.23.0'
+
+    // WebDriverManager (auto-manage browser driver)
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.7.0'
+
+    //driver
+    testImplementation 'io.cucumber:cucumber-picocontainer:7.14.0'
+
+    //allure report
+    testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.25.0'
+    testImplementation 'io.qameta.allure:allure-junit5:2.25.0'
+
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty "allure.results.directory", "${buildDir}/allure-results"
+}

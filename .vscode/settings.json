@@ -1,0 +1,25 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "cucumberautocomplete.steps": [
+        "app/src/test/java/steps/**/*.java"
+    ],
+    "cucumberautocomplete.syncfeatures": "app/src/test/resources/features/**/*.feature",
+    
+    "cucumber.features": [
+        "app/src/test/resources/features/**/*.feature"
+    ],
+    "cucumber.glue": [
+        "app/src/test/java/steps/**/*.java"
+    ],
+
+    "cucumberautocomplete.strictGherkinCompletion": true,
+    "cucumberautocomplete.strictGherkinValidation": true,
+    "cucumberautocomplete.gherkinDefinitionPart": "@(Given|When|Then|And|But)\\(",
+    
+    "editor.quickSuggestions": {
+        "comments": false,
+        "strings": true,
+        "other": true
+    }
+}

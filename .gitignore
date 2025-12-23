@@ -1,0 +1,17 @@
+# Gradle
+.gradle/
+build/
+
+# IntelliJ / IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Allure
+**/allure-results/
+**/allure-report/
+
+# OS
+.DS_Store
+Thumbs.db
