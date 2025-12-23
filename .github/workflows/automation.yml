@@ -1,0 +1,45 @@
+name: UI Automation with Allure
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  automation-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Java (sesuai project kamu Java 21)
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      # 3. Grant execute permission for gradlew
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      # 4. Run automation tests
+      - name: Run tests
+        run: ./gradlew test
+
+      # 5. Generate Allure report
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@v1.9
+        with:
+          allure_results: app/build/allure-results
+          allure_report: app/build/allure-report
+
+      # 6. Upload Allure report as artifact
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: app/build/allure-report
