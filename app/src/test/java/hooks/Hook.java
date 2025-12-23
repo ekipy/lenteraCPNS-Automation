@@ -34,9 +34,22 @@ public class Hook {
         prefs.put("profile.password_manager_enabled", false);
         options.setExperimentalOption("prefs", prefs);
 
+        boolean isCI = Boolean.parseBoolean(
+            System.getenv().getOrDefault("CI", "false")
+        );
+
+        if (isCI) {
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--window-size=1920,1080");
+        }
+
         //menjalankan chromedriver dengan options yang sudah dibuat diatas
         driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
+        if (!isCI) {
+            driver.manage().window().maximize();
+        }
     }
 
     @After
