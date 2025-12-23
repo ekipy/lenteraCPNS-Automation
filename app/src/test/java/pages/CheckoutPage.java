@@ -98,6 +98,11 @@ public class CheckoutPage {
 
         clickLivewireSafely(serviceDetails);
 
+        wait.until(ExpectedConditions.textToBePresentInElement(
+            serviceDetails,
+            "Kategori: CPNS / TRYOUT"
+        ));
+
         String sectionText = serviceDetails.getText();
 
         assertTrue(sectionText.contains("Kategori: CPNS / TRYOUT"));

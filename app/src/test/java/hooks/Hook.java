@@ -34,20 +34,20 @@ public class Hook {
         prefs.put("profile.password_manager_enabled", false);
         options.setExperimentalOption("prefs", prefs);
 
-        boolean isCI = Boolean.parseBoolean(
-            System.getenv().getOrDefault("CI", "false")
-        );
-
-        if (isCI) {
+        String isGithubActions = System.getenv("GITHUB_ACTIONS");
+        if ("true".equalsIgnoreCase(isGithubActions)) {
             options.addArguments("--headless=new");
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--window-size=1920,1080");
+            System.out.println("Running in CI mode (HEADLESS)");
+        } else {
+            System.out.println("Running in LOCAL mode (UI)");
         }
 
         //menjalankan chromedriver dengan options yang sudah dibuat diatas
         driver = new ChromeDriver(options);
-        if (!isCI) {
+        if (!"true".equalsIgnoreCase(isGithubActions)) {
             driver.manage().window().maximize();
         }
     }
