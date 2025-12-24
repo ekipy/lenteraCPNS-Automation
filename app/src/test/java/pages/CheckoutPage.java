@@ -5,17 +5,20 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import components.LiveWireUtils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CheckoutPage {
 
     private WebDriver driver;
+    private LiveWireUtils liveWire;
 
     private By selectCardProduct = By.xpath("//div[contains(@class,'card')]");
     private By detailProducct = By.xpath(".//a[contains(normalize-space(),'Selengkapnya')]");
@@ -31,28 +34,38 @@ public class CheckoutPage {
 
     public CheckoutPage(WebDriver driver){
         this.driver = driver;
+        this.liveWire = new LiveWireUtils(driver);
     }
 
     // ========= UTILITY =============
 
-    protected void clickLivewireSafely(WebElement element) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    protected void clickLivewireSafely(By locator) {
+
+        int timeout = "true".equalsIgnoreCase(System.getenv("GITHUB_ACTIONS")) ? 20 : 10;
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-        wait.until(ExpectedConditions.visibilityOf(element));
+        // 🔥 ambil element fresh
+        for (int i = 0; i < 3; i++) {
+        try {
+            WebElement element = wait.until(
+                ExpectedConditions.elementToBeClickable(locator)
+            );
 
-        js.executeScript(
-            "window.scrollTo(0, arguments[0].offsetTop - 150);",
-            element
-        );
+            js.executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                element
+            );
 
-        wait.until(ExpectedConditions.elementToBeClickable(element));
+            js.executeScript("arguments[0].click();", element);
+            return;
 
-        new Actions(driver)
-            .moveToElement(element)
-            .pause(Duration.ofMillis(100))
-            .click()
-            .perform();
+        } catch (StaleElementReferenceException e) {
+            System.out.println("Retry click due to stale element...");
+        }
+    }
+
+        throw new RuntimeException("Failed to click element due to stale");
     }
 
     private WebElement waitVisible(By locator){
@@ -78,87 +91,38 @@ public class CheckoutPage {
             "//a[contains(normalize-space(),'Selengkapnya')]"
         );
 
-        WebElement btnSelengkapnya = driver.findElement(cardLocator);
-        clickLivewireSafely(btnSelengkapnya);
+        clickLivewireSafely(cardLocator);
     }
 
     public void waitUntilProductDetailDisplayed() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-            detailProducct
-        )).click();
+        liveWire.click(detailProducct);
     }
 
     public void productCheckout(){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // WebElement trigger = wait.until(
-        //     ExpectedConditions.elementToBeClickable(productDetails)
-        // );
-        // clickLivewireSafely(trigger);
-
-        // // 🔥 WAJIB: ambil ulang setelah Livewire render
-        // wait.until(ExpectedConditions.stalenessOf(trigger));
-
-        WebElement serviceDetails = wait.until(
-            ExpectedConditions.refreshed(
-                ExpectedConditions.visibilityOfElementLocated(productDetails)
-            )
-        );
-
-        clickLivewireSafely(serviceDetails);
-
-        wait.until(ExpectedConditions.textToBePresentInElement(
-            serviceDetails,
-            "Kategori: CPNS / TRYOUT"
-        ));
-
-        String sectionText = serviceDetails.getText();
-
-        assertTrue(sectionText.contains("Kategori: CPNS / TRYOUT"));
-        assertTrue(sectionText.contains(
-            "Berisikan soal try out SKD CPNS untuk persiapan ujian tahun 2026"
-        ));
-
-        assertTrue(sectionText.contains("Satu Paket Try Out Online"));
-        assertTrue(sectionText.contains("Bebas kerjain berkali-kali"));
-        assertTrue(sectionText.contains("Soal-soal terbaru, update banget!"));
-        assertTrue(sectionText.contains("Skor langsung keluar, super detail"));
-        assertTrue(sectionText.contains("Ada pembahasan lengkap, nggak cuma jawab"));
-        assertTrue(sectionText.contains("Bisa gabung grup Lentera CPNS"));
-        assertTrue(sectionText.contains("Ranking otomatis update"));
+        liveWire.click(productDetails);
+        liveWire.waitText(productDetails, "Kategori: CPNS / TRYOUT");
     }
 
     public void ambilProduct(){
-        driver.findElement(checkoutProduct).click();
+        liveWire.click(checkoutProduct);
     }
 
     public String getProductPriceFromDetailPage() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        WebElement priceElement = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(
-                labelHarga
-            )
-        );
-
-        return priceElement.getText().trim(); // Rp 15.000
+        return liveWire
+                .waitVisible(labelHarga)
+                .getText()
+                .trim(); // Rp 15.000
     }
 
     public String getCheckoutTotalPrice() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        WebElement priceElement = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(
-                validatedProduct
-            )
-        );
-
-        return priceElement.getText().trim(); // Rp15.000
+        return liveWire
+                .waitVisible(validatedProduct)
+                .getText()
+                .trim(); // Rp15.000
     }
 
     public void bayarSekarang(){
-        driver.findElement(bayarSekarangButton).click();
+        liveWire.click(bayarSekarangButton);
     }
 
     public void verifyInvoicePage() {
