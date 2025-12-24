@@ -40,12 +40,12 @@ jobs:
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
           allure --version
 
-            # 5. Generate Allure report
-            - name: Generate Allure Report
-              if: always()
-              run: |
-                allure generate app/build/allure-results \
-                  -o app/build/allure-report --clean
+      # 5. Generate Allure report
+      - name: Generate Allure Report
+        if: always()
+        run: |
+          allure generate app/build/allure-results \
+          -o app/build/allure-report --clean
 
       # 6. Upload Allure report as artifact
       - name: Upload Allure Report
