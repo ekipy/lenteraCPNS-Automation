@@ -28,7 +28,6 @@ dependencies {
 
     //allure report
     testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.25.0'
-    testImplementation 'io.qameta.allure:allure-junit5:2.25.0'
 
 }
 
