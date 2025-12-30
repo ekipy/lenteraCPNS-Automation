@@ -24,7 +24,7 @@ public class RegisterPage {
     private By registBtn = By.xpath("//button[@type='submit']");
     private By masukBtn = By.xpath("//b[normalize-space()='Masuk Akun Disini']");
     // private By dashboard = By.id("navmenu");
-    private By emailErrors = By.xpath("//li[contains(text(),'email')]");
+    private By emailErrors = By.xpath("//input[@id='email']/following-sibling::ul/li");
     private By emailValidation = By.cssSelector("ul.text-red-600 li");
 
     public RegisterPage(WebDriver driver){
@@ -99,9 +99,19 @@ public class RegisterPage {
     }
 
     public List<String> getEmailValidationMessagesList() {
-        return driver.findElements(emailErrors).stream()
-                 .map(WebElement::getText)
-                 .toList();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // TUNGGU SAMPAI VALIDATION MUNCUL
+        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
+                emailErrors, 0
+        ));
+
+        return driver.findElements(emailErrors)
+            .stream()
+            .map(WebElement::getText)
+            .map(String::trim)
+            .collect(Collectors.toList());
     }
 
     // public List<String> getEmailValidationMessagesList() {
