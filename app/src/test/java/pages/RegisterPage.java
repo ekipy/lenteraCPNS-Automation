@@ -24,7 +24,7 @@ public class RegisterPage {
     private By registBtn = By.xpath("//button[@type='submit']");
     private By masukBtn = By.xpath("//b[normalize-space()='Masuk Akun Disini']");
     // private By dashboard = By.id("navmenu");
-    // private By emailErrors = By.xpath("//li[contains(text(),'email')]");
+    private By emailErrors = By.xpath("//li[contains(text(),'email')]");
     private By emailValidation = By.cssSelector("ul.text-red-600 li");
 
     public RegisterPage(WebDriver driver){
@@ -98,20 +98,20 @@ public class RegisterPage {
                 driver.findElement(locator));
     }
 
-    // public List<String> getEmailValidationMessagesList() {
-    //     return driver.findElements(emailErrors).stream()
-    //              .map(WebElement::getText)
-    //              .toList();
-    // }
-
     public List<String> getEmailValidationMessagesList() {
-        List<WebElement> elements = driver.findElements(emailValidation);
-
-        return elements.stream()
-                .map(WebElement::getText)
-                .map(String::trim)
-                .collect(Collectors.toList());
+        return driver.findElements(emailErrors).stream()
+                 .map(WebElement::getText)
+                 .toList();
     }
+
+    // public List<String> getEmailValidationMessagesList() {
+    //     List<WebElement> elements = driver.findElements(emailValidation);
+
+    //     return elements.stream()
+    //             .map(WebElement::getText)
+    //             .map(String::trim)
+    //             .collect(Collectors.toList());
+    // }
 
     public boolean isDashboardSuccess(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));

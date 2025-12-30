@@ -53,12 +53,10 @@ public class RegisterStep {
 
     @Then("system will be display {string} validation for field email")
     public void system_will_be_display_validation_for_field_email(String expectedMessage) {
-        List<String> actualMessage = registerPage.getEmailValidationMessagesList();
+        List<String> message = registerPage.getEmailValidationMessagesList();
 
-        assertTrue(
-            actualMessage.contains(expectedMessage),
-            () -> "Expected message NOT found.\nExpected: " 
-                + expectedMessage + "\nActual: " + actualMessage
-        );
+        boolean match = message.stream().anyMatch(msg -> msg.equals(expectedMessage));
+
+        assertTrue(match, "Expected error message '" + expectedMessage + "' but got: '" + message);
     }
 }
