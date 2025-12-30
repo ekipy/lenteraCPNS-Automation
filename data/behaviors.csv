@@ -1,0 +1,6 @@
+"Epic","Feature","Story","FAILED","BROKEN","PASSED","SKIPPED","UNKNOWN"
+"","Register Page","Check validation email on Register Page","0","0","2","0","0"
+"","Start Examination","Ensure examination or try out can be interact and the result will be display","0","0","1","0","0"
+"","Register Page","Register with valid data","0","0","1","0","0"
+"","Login to dashboard","User can login for access the dashboard","0","0","1","0","0"
+"","Checkout Process","User choose product and product will be successfully add to purchase process","0","0","1","0","0"
