@@ -1,5 +1,7 @@
 package steps;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.openqa.selenium.WebDriver;
 
 import hooks.Hook;
@@ -23,7 +25,7 @@ public class CommonStep {
     public void user_initiated_to_login(){
         driver.get("https://lenteracpns.com/login");
         loginPage.chooseJenisUser("cpns");
-        loginPage.fillEmailField("test4@gmail.com");
+        loginPage.fillEmailField("test3@gmail.com");
         loginPage.fillPassField("12345678");
         loginPage.loginClick();
     }
@@ -39,6 +41,6 @@ public class CommonStep {
 
     @Then("system will be display screen dashboard")
     public void system_will_be_display_screen_dashboard() {
-        registerPage.isDashboardSuccess();
+        assertTrue(registerPage.isDashboardSuccess());
     }
 }

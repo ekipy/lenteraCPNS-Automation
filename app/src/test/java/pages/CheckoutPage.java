@@ -4,8 +4,6 @@ import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -27,7 +25,7 @@ public class CheckoutPage {
     private By checkoutProduct = By.xpath("//section[@id='service-details']//a[normalize-space()='Ambil Paket Ini, Gaskeun!']");
     private By validatedProduct = By.cssSelector("table tbody tr td:nth-child(3)");
     private By bayarSekarangButton = By.xpath("//button[@id='pay-button']");
-    // private By listPaymentMethod = By.xpath("//h2[contains(text(),'Invoice')]");
+    private By listPaymentMethod = By.id("header");
     private By chooseQRPayment = By.id("other_qris");
     private By qrCodeDisplay = By.cssSelector("img.qr-image");
     //private By checkoutCard = By.xpath("//div[@class='card-wrapper']");
@@ -37,64 +35,20 @@ public class CheckoutPage {
         this.liveWire = new LiveWireUtils(driver);
     }
 
-    // ========= UTILITY =============
-
-    protected void clickLivewireSafely(By locator) {
-
-        int timeout = "true".equalsIgnoreCase(System.getenv("GITHUB_ACTIONS")) ? 20 : 10;
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-
-        // 🔥 ambil element fresh
-        for (int i = 0; i < 3; i++) {
-        try {
-            WebElement element = wait.until(
-                ExpectedConditions.elementToBeClickable(locator)
-            );
-
-            js.executeScript(
-                "arguments[0].scrollIntoView({block:'center'});",
-                element
-            );
-
-            js.executeScript("arguments[0].click();", element);
-            return;
-
-        } catch (StaleElementReferenceException e) {
-            System.out.println("Retry click due to stale element...");
-        }
-    }
-
-        throw new RuntimeException("Failed to click element due to stale");
-    }
-
-    private WebElement waitVisible(By locator){
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    private WebElement waitClickable(By locator){
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(locator));
-    }
-
     // ========== ACTIONS ==============
 
     public List<WebElement> getAllProducts() {
         return driver.findElements(selectCardProduct);
     }
     
-    public void chooseProductByName(String nameProduct){
-        By cardLocator = By.xpath(
-            "//h4[contains(@class,'card-title')]//b[normalize-space()='" + nameProduct + "']" +
-            "/ancestor::div[contains(@class,'card')]" +
-            "//a[contains(normalize-space(),'Selengkapnya')]"
-        );
-
-        clickLivewireSafely(cardLocator);
+    public void focusProductByName(String nameProduct){
+        By productCard = By.xpath(
+        "//div[contains(@class,'card')][.//h4[contains(normalize-space(),'" + nameProduct + "')]]"
+    );
+        liveWire.waitVisible(productCard);
     }
 
-    public void waitUntilProductDetailDisplayed() {
+    public void clickProductDetails() {
         liveWire.click(detailProducct);
     }
 
@@ -104,10 +58,12 @@ public class CheckoutPage {
     }
 
     public void ambilProduct(){
-        liveWire.click(checkoutProduct);
+        driver.findElement(checkoutProduct).click();
     }
 
     public String getProductPriceFromDetailPage() {
+        liveWire.waitForLivewire();
+        
         return liveWire
                 .waitVisible(labelHarga)
                 .getText()
@@ -115,6 +71,8 @@ public class CheckoutPage {
     }
 
     public String getCheckoutTotalPrice() {
+        liveWire.waitForLivewire();
+
         return liveWire
                 .waitVisible(validatedProduct)
                 .getText()
@@ -122,7 +80,7 @@ public class CheckoutPage {
     }
 
     public void bayarSekarang(){
-        liveWire.click(bayarSekarangButton);
+        driver.findElement(bayarSekarangButton).click();
     }
 
     public void verifyInvoicePage() {
@@ -142,21 +100,15 @@ public class CheckoutPage {
     }
 
     public void verifyPaymentMethodPage() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-
-        WebElement qris = wait.until(
-            ExpectedConditions.visibilityOfElementLocated(chooseQRPayment)
-        );
-
-        assertTrue(qris.isDisplayed());
+        liveWire.waitVisible(listPaymentMethod);
     }
 
     public void chooseMethodQR(){
-        waitClickable(chooseQRPayment).click();
+        driver.findElement(chooseQRPayment).click();
     }
 
     public void displayQRCode(){
-        waitVisible(qrCodeDisplay);
+        liveWire.waitVisible(qrCodeDisplay);
     }
 
 }

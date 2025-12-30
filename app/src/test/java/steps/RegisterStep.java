@@ -24,7 +24,12 @@ public class RegisterStep {
 
     @When("user fill {string} field with {string}")
     public void user_fill_field_with(String fieldName, String value) {
+        if (fieldName.equalsIgnoreCase("email") && value.equalsIgnoreCase("RANDOM")) {
+            value = "user_" + System.currentTimeMillis() + "@gmail.com";
+        }
+
         registerPage.fillField(fieldName, value);
+
     }
 
     @When("user click button register")
@@ -48,10 +53,12 @@ public class RegisterStep {
 
     @Then("system will be display {string} validation for field email")
     public void system_will_be_display_validation_for_field_email(String expectedMessage) {
-        List<String> message = registerPage.getEmailValidationMessagesList();
+        List<String> actualMessage = registerPage.getEmailValidationMessagesList();
 
-        boolean match = message.stream().anyMatch(msg -> msg.equals(expectedMessage));
-
-        assertTrue(match, "Expected error message '" + expectedMessage + "' but got: '" + message);
+        assertTrue(
+            actualMessage.contains(expectedMessage),
+            () -> "Expected message NOT found.\nExpected: " 
+                + expectedMessage + "\nActual: " + actualMessage
+        );
     }
 }

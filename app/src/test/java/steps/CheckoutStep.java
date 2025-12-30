@@ -28,8 +28,8 @@ public class CheckoutStep {
 
     @When("click product {string}")
     public void click_product_will_be_purchase(String productName){
-        checkoutPage.chooseProductByName(productName);
-        checkoutPage.waitUntilProductDetailDisplayed();
+        checkoutPage.focusProductByName(productName);
+        checkoutPage.clickProductDetails();
     }
 
     @And("product details will be display")

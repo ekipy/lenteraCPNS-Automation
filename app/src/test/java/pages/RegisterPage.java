@@ -1,11 +1,15 @@
 package pages;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RegisterPage {
 
@@ -19,8 +23,9 @@ public class RegisterPage {
     private By labelEmailValid = By.xpath("//li[normalize-space()='The email field must be a valid email address.']");
     private By registBtn = By.xpath("//button[@type='submit']");
     private By masukBtn = By.xpath("//b[normalize-space()='Masuk Akun Disini']");
-    private By dashboard = By.xpath("//body/div/div[@class='mt-4']/div/section[@class='mt-5']/div[3]");
-    private By emailErrors = By.xpath("//li[contains(text(),'email')]");
+    // private By dashboard = By.id("navmenu");
+    // private By emailErrors = By.xpath("//li[contains(text(),'email')]");
+    private By emailValidation = By.cssSelector("ul.text-red-600 li");
 
     public RegisterPage(WebDriver driver){
         this.driver = driver;
@@ -93,14 +98,25 @@ public class RegisterPage {
                 driver.findElement(locator));
     }
 
+    // public List<String> getEmailValidationMessagesList() {
+    //     return driver.findElements(emailErrors).stream()
+    //              .map(WebElement::getText)
+    //              .toList();
+    // }
+
     public List<String> getEmailValidationMessagesList() {
-        return driver.findElements(emailErrors).stream()
-                 .map(WebElement::getText)
-                 .toList();
+        List<WebElement> elements = driver.findElements(emailValidation);
+
+        return elements.stream()
+                .map(WebElement::getText)
+                .map(String::trim)
+                .collect(Collectors.toList());
     }
 
     public boolean isDashboardSuccess(){
-        return driver.findElement(dashboard).isDisplayed();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.urlContains("/dashboard"));
+        return true;
     }
 
 }

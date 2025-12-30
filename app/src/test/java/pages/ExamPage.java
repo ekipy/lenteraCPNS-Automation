@@ -22,11 +22,11 @@ public class ExamPage {
     private By btnFilterTryOut = By.xpath("//button[normalize-space()='TRYOUT']");
     private By listTryOut = By.xpath("//div[@class='service-box xyz']");
     private By btnBukaPaket = By.xpath("//a[normalize-space()='Buka Paket']");
-    private By labelPaket = By.xpath("//h2[normalize-space()='Try Out SKD CPNS 2026 - BATCH 1']");
+    private By labelPaket = By.xpath("//h2[normalize-space()='SKD CPNS 2026 - BATCH 1']");
     private By btnMulaiPaket = By.xpath("//a[normalize-space()='Mulai ujian']");
     private By popupMulaiPaket = By.xpath("//div[@class='modal-body']");
     private By mulaiUjian = By.xpath("//a[normalize-space()='Langsung ujian']");
-    private By screenTest = By.xpath("//h2[contains(text(),'Try Out SKD CPNS 2026 - BATCH 1')]");
+    private By screenTest = By.xpath("//h2[contains(text(),'SKD CPNS 2026 - BATCH 1')]");
     private By livewireLoading = By.cssSelector("[wire\\:loading]");
     private By asnwerOption = By.cssSelector("label.option");
     private By nextQuestion = By.xpath("//button[contains(.,'Selanjutnya')]");
