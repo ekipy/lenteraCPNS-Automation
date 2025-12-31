@@ -33,7 +33,7 @@ The project is designed as a **QA Automation portfolio**, demonstrating:
 > Below is a preview of the generated Allure Report.
 
 ```md
-![Allure Report Preview](docs/allure-preview.png)
+![Allure Report Preview](./docs/allure-preview.png)
 ```
 
 📌 *Tip: Screenshots significantly improve portfolio credibility for recruiters.*
