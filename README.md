@@ -32,9 +32,8 @@ The project is designed as a **QA Automation portfolio**, demonstrating:
 
 > Below is a preview of the generated Allure Report.
 
-```md
+
 ![Allure Report Preview](https://raw.githubusercontent.com/ekipy/lenteraCPNS-Automation/main/docs/allure-preview.png)
-```
 
 📌 *Tip: Screenshots significantly improve portfolio credibility for recruiters.*
 
@@ -49,18 +48,8 @@ The project is designed as a **QA Automation portfolio**, demonstrating:
   * Email validation (multiple error messages)
   * Required field validation
 * ✅ Login Page
-
-  * Valid login scenario
-  * Invalid credentials handling
-* ✅ General Form Validation
-
-### API Automation (Planned / In Progress)
-
-* 🔄 Authentication API
-* 🔄 User registration API
-* 🔄 Data validation endpoints
-
-> Coverage will continuously expand as the framework evolves.
+* ✅ Checkout Process
+* ✅ Examination Process
 
 ---
 
@@ -72,7 +61,6 @@ The project is designed as a **QA Automation portfolio**, demonstrating:
 | JUnit          | 5 (Jupiter) |
 | Cucumber       | 7.x         |
 | Selenium       | 4.x         |
-| Rest Assured   | Latest      |
 | Gradle         | Wrapper     |
 | Allure Report  | 2.x         |
 | GitHub Actions | CI/CD       |
