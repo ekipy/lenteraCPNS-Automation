@@ -35,8 +35,6 @@ The project is designed as a **QA Automation portfolio**, demonstrating:
 
 ![Allure Report Preview](https://raw.githubusercontent.com/ekipy/lenteraCPNS-Automation/main/docs/allure-preview.png)
 
-📌 *Tip: Screenshots significantly improve portfolio credibility for recruiters.*
-
 ---
 
 ## 📊 Test Coverage
